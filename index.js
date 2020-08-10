@@ -76,7 +76,7 @@ app.get('/compute-with-set-timeout', async function computeWSetTimeout (req, res
   const hash = crypto.createHash('sha256');
   for (let i = 0; i < 10e6; i++) {
     hash.update(randomString());
-    await setTimeoutPromise(0);
+    await setTimeoutPromise(0); // this is nextTick which blocks IO
   }
   res.send(hash.digest('hex') + '\n');
 });
@@ -95,7 +95,7 @@ app.get('/compute-with-set-immediate', async function computeWSetImmediate(req, 
   const hash = crypto.createHash('sha256');
   for (let i = 0; i < 10e6; i++) {
     hash.update(randomString());
-    await setImmediatePromise()
+    await setImmediatePromise() //<- make it async func to micro queue, then it register event in Immediate phase and processed 
   }
   res.send(hash.digest('hex') + '\n');
 });
