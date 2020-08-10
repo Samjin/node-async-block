@@ -84,9 +84,11 @@ app.get('/compute-with-set-timeout', async function computeWSetTimeout (req, res
 app.get('/compute-with-set-immediate', async function computeWSetImmediate(req, res) {
   log('computing async with setImmidiate!');
 
+  // setImmediate(() => resolve())  this won't block or waiting any I/O poll, 
+  // it always resolves before any async functions that potentially runs long time.
   function setImmediatePromise() {
     return new Promise((resolve) => {
-      setImmediate(() => resolve());
+      setImmediate(() => resolve()); 
     });
   }
 
